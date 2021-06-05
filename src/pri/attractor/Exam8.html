@@ -51,6 +51,7 @@
         document.getElementsByClassName('cities')[0].prepend(le);
     }
 
+
     async function getCountries() {
         await fetch('https://restcountries.eu/rest/v2/all')
             .then(response => response.json())
