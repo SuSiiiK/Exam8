@@ -29,6 +29,21 @@
         }
     }
 
+    let countries = [];
+
+    function addCountry(i) {
+        const country = countries[i];
+        let le = document.createElement('div');
+        le.classList.add('border', 'mt-2', 'w-75')
+        le.innerHTML = `<ul>
+                 <li>Name: ${country.name}</li>
+                 <li>Capital: ${country.capital}</li>
+                 <li>Region: ${country.region}</li>
+                 <li>Image: <img src="${country.flag}" class="w-25 h-25"></li>
+                 <li><a href="https://www.google.com/search?q=${country.name}">More</a></li>
+             </ul>`;
+        document.getElementsByClassName('cities')[0].prepend(le);
+    }
 
 </script>
 </html>
