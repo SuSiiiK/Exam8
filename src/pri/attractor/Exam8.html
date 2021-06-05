@@ -9,23 +9,28 @@
 </head>
 <body>
 <div class="container d-flex mt-2 align-items-center justify-content-center">
-    <form class="form-inline align-items-center ">
-        <input autofocus class="form-control mr-sm-2" type="text" name="country-name-form" placeholder="Search"
-               aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0 country-submit" name="country-submit" type="submit">Search
+    <form class="form-inline d-flex row align-items-center justify-content-center">
+        <input autofocus class="form-control mr-sm-2" type="text" name="country-name-form"
+               placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0 country-submit" name="country-submit"
+                type="submit">Search
         </button>
     </form>
 </div>
+<div class="container m-auto cities d-flex flex-column align-items-center justify-content-center">
 
+</div>
 </body>
 <script language="JavaScript">
     class Country {
-        constructor(name, capital, flag, region, alpha2Code) {
+        constructor(name, capital, flag, region, currency, alpha2Code) {
             this.name = name;
             this.capital = capital;
             this.flag = flag;
+            this.currency = currency;
             this.region = region;
             this.alpha2Code = alpha2Code;
+
         }
     }
 
@@ -35,15 +40,72 @@
         const country = countries[i];
         let le = document.createElement('div');
         le.classList.add('border', 'mt-2', 'w-75')
-        le.innerHTML = `<ul>
-                 <li>Name: ${country.name}</li>
-                 <li>Capital: ${country.capital}</li>
-                 <li>Region: ${country.region}</li>
-                 <li>Image: <img src="${country.flag}" class="w-25 h-25"></li>
-                 <li><a href="https://www.google.com/search?q=${country.name}">More</a></li>
-             </ul>`;
+        le.innerHTML = ` <h1>${country.name}</h1>
+                    <p>Currency: ${country.region}</p>
+                    <p>Capital: ${country.capital}</p>
+                    <p>Region: ${country.currency}</p>
+                    <p><img src="${country.flag}" class="w-50 h-50"></p>
+                    <p><a href="https://www.google.com/search?q=${country.name}" target="_blank">Google</a></p>
+                    <p><a href="https://ru.m.wikipedia.org/wiki/${country.name}" target="_blank">WIKI</a></p>
+                     <p><a href="https://www.google.com/maps/place/${country.name}" target="_blank">MAPS</a></p>`;
         document.getElementsByClassName('cities')[0].prepend(le);
     }
 
+    async function getCountries() {
+        await fetch('https://restcountries.eu/rest/v2/all')
+            .then(response => response.json())
+            .then(json => {
+                console.log(json);
+                for (let i = 0; i < 250; i++) {
+                    countries.push(new Country(json[i].name, json[i].capital, json[i].flag,
+                        json[i].currencies[0].name, json[i].region, json[i].alpha2Code));
+                }
+            });
+    }
+
+    function getCountryInput(city) {
+        let name = city;
+        let found = false;
+        for (let i = 0; i < countries.length; i++) {
+            if (name.length > 0) {
+                if (countries[i].name === name) {
+                    addCountry(i);
+                    found = true;
+                }
+            }if (name.length === 2) {
+                if (countries[i].alpha2Code === name) {
+                    addCountry(i);
+                    found = true;
+                }
+            }
+        }
+        if (!found) {
+            alert("We haven't found such country.");
+        }
+    }
+
+    function preventCountryName() {
+        const countrySubmit = document.getElementsByClassName('country-submit')[0];
+        countrySubmit.addEventListener('click', function (event) {
+            const form = document.getElementsByClassName('form-inline')[0];
+            const formInput = form.elements;
+            if (formInput['country-name-form'].value === "") {
+                alert("Please write Country's name");
+            } else if (formInput['country-name-form'].value.length < 2) {
+                alert("Please write Country's name more than 2 symbols.");
+            } else {
+                getCountryInput(formInput['country-name-form'].value);
+            }
+            formInput['country-name-form'].value = '';
+            formInput['country-name-form'].focus();
+            event.preventDefault();
+        });
+    }
+
+
+    getCountries().then(r => {
+        preventCountryName();
+        console.log(r);
+    });
 </script>
 </html>
