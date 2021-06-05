@@ -10,13 +10,25 @@
 <body>
 <div class="container d-flex mt-2 align-items-center justify-content-center">
     <form class="form-inline align-items-center ">
-        <input autofocus class="form-control mr-sm-2" type="text" name="country-name-form" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0 country-submit" name="country-submit"type="submit">Search</button>
+        <input autofocus class="form-control mr-sm-2" type="text" name="country-name-form" placeholder="Search"
+               aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0 country-submit" name="country-submit" type="submit">Search
+        </button>
     </form>
 </div>
 
 </body>
 <script language="JavaScript">
+    class Country {
+        constructor(name, capital, flag, region, alpha2Code) {
+            this.name = name;
+            this.capital = capital;
+            this.flag = flag;
+            this.region = region;
+            this.alpha2Code = alpha2Code;
+        }
+    }
+
 
 </script>
 </html>
